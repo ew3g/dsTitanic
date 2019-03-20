@@ -237,6 +237,31 @@ for dataset in combine:
 
 #the column Embarked takes S, Q and C, based on gate of embarkation
 #to fill the empty values in this column we can fill it with the most common ocurrence
-#take the mode value of Embarked column
+#take the mode value of Embarked columncon
 freq_port = train_df.Embarked.dropna().mode()[0]
-print(freq_port)
+#print(freq_port)
+
+for dataset in combine:
+  #fill the empty values with the most frequent port
+  dataset['Embarked'] = dataset['Embarked'].fillna(freq_port)
+
+
+#group by the embarked gate and takes the mean of survivibility rate
+#print(train_df[['Embarked', 'Survived']].groupby(['Embarked'], as_index=False).mean().sort_values(by='Survived', ascending=False))
+
+#classify the embarked as a ordinal data
+for dataset in combine:
+  dataset['Embarked'] = dataset['Embarked'].map({'S': 0, 'C': 1, 'Q': 2}).astype(int)
+
+#print(train_df.head())
+
+#fill the null and empty values in Fare column with the most middle value of the fare
+#to not interfere in final result
+
+test_df['Fare'].fillna(test_df['Fare'].dropna().median(), inplace=True)
+#print(test_df.head())
+
+#now is possible to create a fare band
+train_df['FareBand'] = pd.qcut(train_df['Fare'], 4)
+#the mean of suvivibility rate by the fareband
+print(train_df[['FareBand', 'Survived']].groupby(['FareBand'], as_index=False).mean().sort_values(by='FareBand', ascending=True))
