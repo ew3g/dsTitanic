@@ -3,5 +3,3 @@ Study project in python with its datascience libraries based on titanic dataset 
 
 Runs on Python 3
 install dependencies on pip3 install requeriments.txt
-
-teste
